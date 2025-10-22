@@ -1,0 +1,138 @@
+<%
+/**
+ * Tag Helper Functions
+ * Centralized utilities for working with attribute tags and regular tags
+ *
+ * Note: Functions are defined without const/let/var to make them
+ * available in the parent template's scope (EJS scoping requirement)
+ */
+
+// Attribute tag system: tags starting with 'att-' are for dynamic design purposes
+isAttributeTag = function(tag) { return tag.startsWith('att-'); };
+isPageTag = function(tag) { return tag.startsWith('att-page:'); };
+isSidebarTag = function(tag) { return tag.startsWith('att-sb:'); };
+
+/**
+ * Filters out attribute tags from a tag array
+ */
+getDisplayTags = function(tags) {
+  return tags.filter(tag => !isAttributeTag(tag));
+};
+
+/**
+ * Gets sidebar tags from an array of tags
+ */
+getSidebarTags = function(tags) {
+  return tags.filter(tag => isSidebarTag(tag));
+};
+
+/**
+ * Builds hierarchical tree structure from sidebar tags
+ */
+buildTagTree = function(tags, tagCounts) {
+  const tree = {};
+  const PREFIX = 'att-sb:';
+
+  tags.forEach(tag => {
+    // Remove the att-sb: prefix and split by colon
+    const withoutPrefix = tag.substring(PREFIX.length);
+    const parts = withoutPrefix.split(':');
+    let current = tree;
+
+    // Build nested structure
+    parts.forEach((part, index) => {
+      if (!current[part]) {
+        // Build the correct full tag for this level
+        const partialPath = parts.slice(0, index + 1).join(':');
+        current[part] = {
+          _fullTag: PREFIX + partialPath,
+          _displayPath: partialPath,
+          _count: 0,
+          _children: {}
+        };
+      }
+      current = current[part]._children;
+    });
+  });
+
+  // Calculate counts for parent nodes
+  const calculateCounts = (node, originalTag) => {
+    const hasChildren = Object.keys(node._children).length > 0;
+    let count = 0;
+
+    if (hasChildren) {
+      // Parent node: sum up all children counts (don't add parent's own count)
+      Object.keys(node._children).forEach(key => {
+        const child = node._children[key];
+        count += calculateCounts(child, child._fullTag);
+      });
+    } else {
+      // Leaf node: use the direct count from tagCounts
+      count = tagCounts[originalTag] || 0;
+    }
+
+    node._count = count;
+    return count;
+  };
+
+  Object.keys(tree).forEach(key => {
+    calculateCounts(tree[key], tree[key]._fullTag);
+  });
+
+  return tree;
+};
+
+/**
+ * Renders a hierarchical tag tree as HTML
+ */
+renderTree = function(tree, level) {
+  level = level || 0;
+  const keys = Object.keys(tree).sort();
+  let html = '';
+
+  keys.forEach(key => {
+    const node = tree[key];
+    const hasChildren = Object.keys(node._children).length > 0;
+    const baseIndent = 2;
+    const indent = baseIndent + (level * 1.5);
+
+    html += `<div class="tree-node" data-level="${level}">`;
+
+    if (hasChildren) {
+      // Parent node with children
+      html += `<button class="tree-item tree-parent" data-filter="${node._fullTag}" data-level="${level}" aria-pressed="false" style="padding-left: ${indent}rem; padding-right: 1.5rem;">
+        <span class="tree-toggle">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </span>
+        <span class="tree-item-label">${key}</span>
+        <span class="tree-item-count">${node._count}</span>
+      </button>`;
+
+      html += `<div class="tree-children">`;
+      html += renderTree(node._children, level + 1);
+      html += `</div>`;
+    } else {
+      // Leaf node
+      html += `<button class="tree-item tree-leaf" data-filter="${node._fullTag}" data-level="${level}" aria-pressed="false" style="padding-left: ${indent + 1.5}rem; padding-right: 1.5rem;">
+        <span class="tree-item-label">${key}</span>
+        <span class="tree-item-count">${node._count}</span>
+      </button>`;
+    }
+
+    html += `</div>`;
+  });
+
+  return html;
+};
+
+/**
+ * Extracts hero image from article HTML content
+ */
+extractHeroImage = function(htmlContent) {
+  const heroImageMatch = htmlContent.match(/<img[^>]+title=["']hero["'][^>]*src=["']([^"']+)["'][^>]*>/i) ||
+                         htmlContent.match(/<img[^>]+src=["']([^"']+)["'][^>]+title=["']hero["'][^>]*>/i);
+  return heroImageMatch ? heroImageMatch[1] : null;
+};
+%>

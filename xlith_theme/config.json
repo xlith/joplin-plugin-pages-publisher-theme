@@ -1,0 +1,228 @@
+{
+  "author": "xlith",
+  "pages": {
+    "index": [
+      {
+        "name": "menu",
+        "label": "Menu",
+        "inputType": "menu",
+        "tip": "Navigating Menu displayed in Index Page",
+        "defaultValue": [
+          { "label": "Archives", "link": "archives" },
+          { "label": "About", "link": "about" }
+        ]
+      },
+      {
+        "name": "title",
+        "label": "Title",
+        "rules": [{ "required": true }],
+        "tip": "Title displayed in Page.",
+        "defaultValue": "Home"
+      },
+      {
+        "name": "profileImage",
+        "label": "Profile Image Path",
+        "tip": "Path to profile image (relative to _assets folder)",
+        "defaultValue": "/_assets/images/profile.jpg"
+      },
+      {
+        "name": "greeting",
+        "label": "Greeting Text",
+        "inputType": "textarea",
+        "tip": "Hi, I&#39;m &lt;span class=&quot;underline-mint&quot;&gt;Your Name&lt;/span&gt;",
+        "defaultValue": "Hi, I'm <span class='underline-mint'>Your Name</span>"
+      },
+      {
+        "name": "paragraph",
+        "label": "Greeting Paragraph",
+        "inputType": "textarea",
+        "defaultValue": "Senior Software Engineer crafting &lt;span class=&quot;underline-lilac&quot;&gt;elegant solutions&lt;/span&gt; to complex problems"
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "tip": "Your email address (leave empty to hide)"
+      },
+      {
+        "name": "githubUrl",
+        "label": "GitHub URL",
+        "tip": "Your GitHub profile URL (leave empty to hide)"
+      },
+      {
+        "name": "linkedinUrl",
+        "label": "LinkedIn URL",
+        "tip": "Your LinkedIn profile URL (leave empty to hide)"
+      },
+      {
+        "name": "twitterUrl",
+        "label": "Twitter/X URL",
+        "tip": "Your Twitter/X profile URL (leave empty to hide)"
+      },
+      {
+        "name": "gitlabUrl",
+        "label": "GitLab URL",
+        "tip": "Your GitLab profile URL (leave empty to hide)"
+      },
+      {
+        "name": "mastodonUrl",
+        "label": "Mastodon URL",
+        "tip": "Your Mastodon profile URL (leave empty to hide)"
+      },
+      {
+        "name": "devtoUrl",
+        "label": "Dev.to URL",
+        "tip": "Your Dev.to profile URL (leave empty to hide)"
+      },
+      {
+        "name": "mediumUrl",
+        "label": "Medium URL",
+        "tip": "Your Medium profile URL (leave empty to hide)"
+      },
+      {
+        "name": "stackoverflowUrl",
+        "label": "Stack Overflow URL",
+        "tip": "Your Stack Overflow profile URL (leave empty to hide)"
+      },
+      {
+        "name": "codepenUrl",
+        "label": "CodePen URL",
+        "tip": "Your CodePen profile URL (leave empty to hide)"
+      },
+      {
+        "name": "youtubeUrl",
+        "label": "YouTube URL",
+        "tip": "Your YouTube channel URL (leave empty to hide)"
+      },
+      {
+        "name": "discordUrl",
+        "label": "Discord URL",
+        "tip": "Your Discord server/profile URL (leave empty to hide)"
+      },
+      {
+        "name": "customSocialUrls",
+        "label": "Custom Social URLs (JSON)",
+        "inputType": "textarea",
+        "tip": "Additional social URLs as JSON array: [{\"url\": \"https://...\", \"label\": \"Platform\", \"icon\": \"<svg>...</svg>\"}]",
+        "defaultValue": "[]"
+      }
+    ],
+    "article": [
+      {
+        "name": "dateFormat",
+        "label": "Date Format",
+        "defaultValue": "MMMM D, YYYY"
+      },
+      {
+        "name": "title",
+        "label": "Title",
+        "rules": [{ "required": true }],
+        "tip": "Title displayed in Page.",
+        "defaultValue": "Article"
+      },
+      {
+        "name": "defaultDifficulty",
+        "label": "Default Difficulty Level",
+        "tip": "Default difficulty for tutorials (Beginner, Intermediate, Advanced)",
+        "defaultValue": "Intermediate"
+      },
+      {
+        "name": "description",
+        "label": "Page Description",
+        "inputType": "textarea",
+        "tip": "SEO meta description for this page"
+      }
+    ],
+    "archive": [
+      {
+        "name": "dateFormat",
+        "label": "Date Format",
+        "defaultValue": "MMMM D, YYYY"
+      },
+      {
+        "name": "title",
+        "label": "Title",
+        "rules": [{ "required": true }],
+        "tip": "Title displayed in Page.",
+        "defaultValue": "Blog"
+      }
+    ],
+    "tutorials": [
+      {
+        "name": "dateFormat",
+        "label": "Date Format",
+        "defaultValue": "MMMM D, YYYY"
+      },
+      {
+        "name": "title",
+        "label": "Title",
+        "rules": [{ "required": true }],
+        "tip": "Title displayed in Page.",
+        "defaultValue": "Tutorials"
+      }
+    ],
+    "about": [
+      {
+        "name": "title",
+        "label": "Title",
+        "rules": [{ "required": true }],
+        "tip": "Title displayed in Page.",
+        "defaultValue": "About"
+      }
+    ]
+  },
+  "siteFields": [
+    {
+      "name": "siteName",
+      "label": "Site Name",
+      "rules": [{ "required": true }],
+      "tip": "Site name displayed in left-top corner of every page"
+    },
+    {
+      "name": "siteDescription",
+      "label": "Site Description",
+      "inputType": "textarea",
+      "tip": "Default meta description for SEO (shown in search results)"
+    },
+    {
+      "name": "siteUrl",
+      "label": "Site URL",
+      "tip": "Full URL of your site (e.g., https://example.com) - used for Open Graph and canonical URLs"
+    },
+    {
+      "name": "ogImage",
+      "label": "Default OG Image",
+      "tip": "Default image for social media sharing (absolute URL recommended)"
+    },
+    {
+      "name": "favicon",
+      "label": "Favicon Path",
+      "tip": "Path to favicon.ico file (default: /favicon.ico)"
+    },
+    {
+      "name": "appleTouchIcon",
+      "label": "Apple Touch Icon Path",
+      "tip": "Path to apple-touch-icon.png (default: /apple-touch-icon.png)"
+    },
+    {
+      "name": "themeColor",
+      "label": "Theme Color",
+      "tip": "Browser theme color in hex format (default: #6fdcbf)"
+    },
+    {
+      "name": "canonicalUrl",
+      "label": "Canonical Base URL",
+      "tip": "Base URL for canonical tags (usually same as Site URL)"
+    },
+    {
+      "name": "author",
+      "label": "Site Author",
+      "tip": "Default author name for meta tags"
+    },
+    {
+      "name": "footerText",
+      "label": "Footer Text",
+      "inputType": "markdown",
+      "tip": "Built with &lt;span class=&#39;underline-pink&#39;&gt;passion&lt;/span&gt; and &lt;span class=&#39;underline-mint&#39;&gt;code&lt;/span&gt;"
+    }
+  ]
+}

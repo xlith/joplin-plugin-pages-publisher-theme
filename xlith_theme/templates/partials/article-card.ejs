@@ -1,0 +1,40 @@
+<%
+/**
+ * Reusable Article Card Partial
+ * Parameters:
+ *   - article: Article object with title, fullUrl, updatedAt, excerpt, tags, htmlContent
+ *   - showHeroImage: Boolean to show/hide hero image (default: true)
+ */
+
+const showHero = typeof showHeroImage !== 'undefined' ? showHeroImage : true;
+const heroImage = showHero ? extractHeroImage(article.htmlContent) : null;
+
+// Use ALL tags for filtering (not just display tags) - exclude only att-page: tags
+const filterableTags = article.tags ? article.tags.filter(tag => !tag.startsWith('att-page:')) : [];
+%>
+
+<li class="archive-item" data-tags="<%= filterableTags.join(',') %>">
+  <% if (heroImage) { %>
+    <a href="<%= article.fullUrl %>" class="tutorial-hero-link" aria-label="View <%= article.title %>">
+      <div class="tutorial-hero-image">
+        <img src="<%= heroImage %>" alt="<%= article.title %>" loading="lazy">
+      </div>
+    </a>
+  <% } %>
+  <div class="tutorial-content-wrapper">
+    <div class="article-meta">
+      <time datetime="<%= article.updatedAt %>"><%= formatDateLong(article.updatedAt) %></time>
+    </div>
+    <h3><a href="<%= article.fullUrl %>"><%= article.title %></a></h3>
+    <% if (article.excerpt) { %>
+      <p class="article-excerpt"><%= article.excerpt %></p>
+    <% } %>
+    <% if (getDisplayTags(article.tags).length > 0) { %>
+      <div class="tags">
+        <% getDisplayTags(article.tags).forEach(tag => { %>
+          <span class="tag"><%= tag %></span>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</li>

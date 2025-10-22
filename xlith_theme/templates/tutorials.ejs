@@ -1,0 +1,93 @@
+<%- include('partials/header') %>
+<%- include('helpers/tagHelpers') %>
+<%- include('helpers/dateHelpers') %>
+
+<section class="hero hero-tutorials" aria-labelledby="tutorials-heading">
+  <div class="hero-content">
+    <h1 id="tutorials-heading">Tutorials & <span class="underline-mint">How-To</span> Guides</h1>
+    <p class="subtitle">Step-by-step guides to learn and build</p>
+  </div>
+</section>
+
+<%
+  // Get all tutorials
+  const tutorials = $site.articles.filter(article => article.tags && article.tags.includes('att-page:tutorial'));
+
+  // Collect sidebar tags and regular (display) tags
+  const sidebarTags = new Set();
+  const regularTags = new Set();
+
+  tutorials.forEach(article => {
+    article.tags.forEach(tag => {
+      if (isSidebarTag(tag)) {
+        sidebarTags.add(tag);
+      } else if (!isAttributeTag(tag)) {
+        regularTags.add(tag);
+      }
+    });
+  });
+
+  // Convert to arrays and sort
+  const sortedSidebarTags = Array.from(sidebarTags).sort();
+  const sortedAllTags = Array.from(new Set([...sidebarTags, ...regularTags])).sort();
+
+  // Count tutorials per tag
+  const tagCounts = {};
+  sortedAllTags.forEach(tag => {
+    tagCounts[tag] = tutorials.filter(article => article.tags.includes(tag)).length;
+  });
+
+  const tagTree = buildTagTree(sortedSidebarTags, tagCounts);
+  const hasSidebarTags = sortedSidebarTags.length > 0;
+%>
+
+<!-- Tutorial Content with Sidebar -->
+<div class="tutorial-layout<%= hasSidebarTags ? '' : ' no-sidebar' %>">
+  <!-- Sidebar -->
+  <% if (hasSidebarTags) { %>
+  <aside class="tutorial-sidebar" id="tutorial-sidebar" aria-label="Tutorial filters">
+    <!-- Mobile Toggle -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle filter menu" aria-expanded="false" aria-controls="sidebar-content">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-header">
+        <h2>Filter Tutorials</h2>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Tutorial categories">
+        <!-- All Tutorials -->
+        <button class="tree-item tree-item-all active" data-filter="all" data-level="0" aria-pressed="true">
+          <span class="tree-item-label">All Tutorials</span>
+          <span class="tree-item-count"><%= tutorials.length %></span>
+        </button><%- renderTree(tagTree) %>
+      </nav>
+    </div>
+  </aside>
+  <% } %>
+
+  <!-- Main Content -->
+  <main class="tutorial-main">
+    <section aria-live="polite" aria-atomic="false">
+      <ul class="archive-list" id="tutorials-list">
+     <% tutorials.forEach(article => {
+      const filterTags = article.tags ? article.tags.filter(tag => !isPageTag(tag)) : [];
+    %>
+        <%- include('partials/article-card', { article: article, showHeroImage: true }) %>
+    <% }) %>
+  </ul>
+
+      <!-- No results message -->
+      <div id="no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
+        <p>No tutorials found with the selected tag.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<%- include('partials/footer') %>

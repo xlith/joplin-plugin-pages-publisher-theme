@@ -1,0 +1,471 @@
+/**
+ * Accessibility and Anti-pattern Fixes
+ * Add these styles to your main style.css file
+ */
+
+/* ============================================
+   SKIP LINK (Accessibility)
+   ============================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 10000;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   NAVIGATION LIST (Semantic HTML)
+   ============================================ */
+
+nav .nav-list {
+  list-style: none;
+  display: flex;
+  gap: 2.5rem; /* Match original var(--space-10) */
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+nav .nav-list li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure nav links maintain original styling */
+nav .nav-list a {
+  /* Styles inherited from nav a in main CSS */
+}
+
+/* Fix nth-child selectors to work with new li structure */
+nav .nav-list li:nth-child(1) a:hover { text-decoration-color: var(--color-mint); }
+nav .nav-list li:nth-child(2) a:hover { text-decoration-color: var(--color-lilac); }
+nav .nav-list li:nth-child(3) a:hover { text-decoration-color: var(--color-sea); }
+nav .nav-list li:nth-child(4) a:hover { text-decoration-color: var(--color-peach); }
+
+/* ============================================
+   UTILITY CLASSES (Replace Inline Styles)
+   ============================================ */
+
+/* Hidden elements (replaces display: none) */
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+/* Fade-in animation (replaces inline animations) */
+.fade-in {
+  animation: fadeInSlide 0.4s ease forwards;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-in element for intersection observer */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in-element.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Rotated state for tree toggle icons */
+.tree-toggle {
+  transition: transform 0.2s ease;
+  transform: rotate(0deg);
+}
+
+.tree-toggle.rotated {
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   FOCUS STYLES (Accessibility)
+   ============================================ */
+
+/* Enhanced focus indicators for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove default focus outline for mouse users */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================
+   ARIA ENHANCEMENTS
+   ============================================ */
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   ARTICLE CARD HORIZONTAL LAYOUT FIX
+   ============================================ */
+
+/* Make archive items horizontal when they have images */
+.archive-item:has(.tutorial-hero-link) {
+  display: flex;
+  gap: 2.5rem; /* var(--space-10) */
+  align-items: flex-start;
+}
+
+/* Fallback for browsers that don't support :has() */
+.archive-item .tutorial-hero-link ~ .tutorial-content-wrapper {
+  display: block;
+}
+
+.archive-item {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+/* ============================================
+   IMAGE IMPROVEMENTS
+   ============================================ */
+
+/* Prevent layout shift from lazy-loaded images */
+img[loading="lazy"] {
+  min-height: 200px;
+  background: var(--color-bg-tertiary);
+}
+
+/* Figure element improvements */
+figure {
+  margin: 0;
+}
+
+/* ============================================
+   SUBTLE TAG COLORS (Matches Hero Gradients)
+   ============================================ */
+
+/* Soft, subtle tag design matching hero sections */
+.tag {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.15) 0%, rgba(114, 202, 218, 0.15) 100%) !important;
+  color: #3d5a5a !important;
+  font-weight: 500 !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 6px !important;
+  font-size: 0.8rem !important;
+  border: 1px solid rgba(111, 220, 191, 0.25) !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.tag:hover {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.25) 0%, rgba(114, 202, 218, 0.25) 100%) !important;
+  border-color: rgba(111, 220, 191, 0.5) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(111, 220, 191, 0.2) !important;
+}
+
+/* Specific tag color variations - soft and harmonious */
+.tag-mint {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.12) 0%, rgba(111, 220, 191, 0.08) 100%) !important;
+  color: #2d7a67 !important;
+  border-color: rgba(111, 220, 191, 0.3) !important;
+}
+
+.tag-mint:hover {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.22) 0%, rgba(111, 220, 191, 0.15) 100%) !important;
+}
+
+.tag-lilac {
+  background: linear-gradient(135deg, rgba(174, 143, 219, 0.12) 0%, rgba(174, 143, 219, 0.08) 100%) !important;
+  color: #5e3d8f !important;
+  border-color: rgba(174, 143, 219, 0.3) !important;
+}
+
+.tag-lilac:hover {
+  background: linear-gradient(135deg, rgba(174, 143, 219, 0.22) 0%, rgba(174, 143, 219, 0.15) 100%) !important;
+}
+
+.tag-sea {
+  background: linear-gradient(135deg, rgba(114, 202, 218, 0.12) 0%, rgba(114, 202, 218, 0.08) 100%) !important;
+  color: #2d6c7a !important;
+  border-color: rgba(114, 202, 218, 0.3) !important;
+}
+
+.tag-sea:hover {
+  background: linear-gradient(135deg, rgba(114, 202, 218, 0.22) 0%, rgba(114, 202, 218, 0.15) 100%) !important;
+}
+
+.tag-peach {
+  background: linear-gradient(135deg, rgba(242, 195, 192, 0.12) 0%, rgba(242, 195, 192, 0.08) 100%) !important;
+  color: #a05855 !important;
+  border-color: rgba(242, 195, 192, 0.3) !important;
+}
+
+.tag-peach:hover {
+  background: linear-gradient(135deg, rgba(242, 195, 192, 0.22) 0%, rgba(242, 195, 192, 0.15) 100%) !important;
+}
+
+.tag-rose {
+  background: linear-gradient(135deg, rgba(220, 132, 155, 0.12) 0%, rgba(220, 132, 155, 0.08) 100%) !important;
+  color: #8f3d52 !important;
+  border-color: rgba(220, 132, 155, 0.3) !important;
+}
+
+.tag-rose:hover {
+  background: linear-gradient(135deg, rgba(220, 132, 155, 0.22) 0%, rgba(220, 132, 155, 0.15) 100%) !important;
+}
+
+.tag-pink {
+  background: linear-gradient(135deg, rgba(235, 72, 136, 0.12) 0%, rgba(235, 72, 136, 0.08) 100%) !important;
+  color: #a02d5c !important;
+  border-color: rgba(235, 72, 136, 0.3) !important;
+}
+
+.tag-pink:hover {
+  background: linear-gradient(135deg, rgba(235, 72, 136, 0.22) 0%, rgba(235, 72, 136, 0.15) 100%) !important;
+}
+
+.tag-green {
+  background: linear-gradient(135deg, rgba(36, 208, 90, 0.12) 0%, rgba(36, 208, 90, 0.08) 100%) !important;
+  color: #1a7a3e !important;
+  border-color: rgba(36, 208, 90, 0.3) !important;
+}
+
+.tag-green:hover {
+  background: linear-gradient(135deg, rgba(36, 208, 90, 0.22) 0%, rgba(36, 208, 90, 0.15) 100%) !important;
+}
+
+.tag-blue {
+  background: linear-gradient(135deg, rgba(16, 162, 245, 0.12) 0%, rgba(16, 162, 245, 0.08) 100%) !important;
+  color: #0d5e9e !important;
+  border-color: rgba(16, 162, 245, 0.3) !important;
+}
+
+.tag-blue:hover {
+  background: linear-gradient(135deg, rgba(16, 162, 245, 0.22) 0%, rgba(16, 162, 245, 0.15) 100%) !important;
+}
+
+.tag-yellow {
+  background: linear-gradient(135deg, rgba(233, 188, 63, 0.12) 0%, rgba(233, 188, 63, 0.08) 100%) !important;
+  color: #8f6d1f !important;
+  border-color: rgba(233, 188, 63, 0.3) !important;
+}
+
+.tag-yellow:hover {
+  background: linear-gradient(135deg, rgba(233, 188, 63, 0.22) 0%, rgba(233, 188, 63, 0.15) 100%) !important;
+}
+
+/* Small tags in tutorials */
+.tag--small, .tag.tag--small {
+  font-size: 0.7rem !important;
+  padding: 0.25rem 0.6rem !important;
+  font-weight: 400 !important;
+}
+
+/* ============================================
+   SUBTLE SIDEBAR COLORS (Matches Hero)
+   ============================================ */
+
+/* Sidebar header - soft gradient like hero */
+.sidebar-header {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.08) 0%, rgba(114, 202, 218, 0.08) 100%) !important;
+  border-bottom: 1px solid rgba(111, 220, 191, 0.2) !important;
+  padding: 1.5rem 2rem !important;
+}
+
+.sidebar-header h2, .sidebar-header h3 {
+  color: #3d5a5a !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  font-size: 1.1rem !important;
+}
+
+/* Tree items - default state (subtle) */
+.tree-item {
+  background: transparent !important;
+  color: #555 !important;
+  font-weight: 400 !important;
+  border-left: 2px solid transparent !important;
+  transition: all 0.3s ease !important;
+}
+
+.tree-item:hover {
+  background: linear-gradient(90deg, rgba(111, 220, 191, 0.08) 0%, transparent 100%) !important;
+  color: #2d7a67 !important;
+  border-left-color: rgba(111, 220, 191, 0.4) !important;
+}
+
+/* Tree items - active state (subtle gradient) */
+.tree-item.active,
+.tree-item[aria-pressed="true"] {
+  background: linear-gradient(90deg, rgba(111, 220, 191, 0.15) 0%, rgba(114, 202, 218, 0.05) 100%) !important;
+  color: #2d7a67 !important;
+  font-weight: 500 !important;
+  border-left-color: rgba(111, 220, 191, 0.6) !important;
+  border-left-width: 3px !important;
+}
+
+/* Tree item count badges - soft and minimal */
+.tree-item-count {
+  background: rgba(111, 220, 191, 0.15) !important;
+  color: #2d7a67 !important;
+  font-weight: 500 !important;
+  padding: 0.15rem 0.5rem !important;
+  border-radius: 12px !important;
+  font-size: 0.7rem !important;
+  min-width: 22px !important;
+  text-align: center !important;
+  border: 1px solid rgba(111, 220, 191, 0.25) !important;
+}
+
+.tree-item.active .tree-item-count,
+.tree-item[aria-pressed="true"] .tree-item-count {
+  background: rgba(111, 220, 191, 0.25) !important;
+  color: #1a5a4a !important;
+  font-weight: 600 !important;
+  border-color: rgba(111, 220, 191, 0.4) !important;
+}
+
+/* Tree toggle icon - subtle color */
+.tree-toggle {
+  color: rgba(111, 220, 191, 0.6) !important;
+  transition: all 0.3s ease !important;
+}
+
+.tree-item:hover .tree-toggle {
+  color: rgba(111, 220, 191, 0.8) !important;
+}
+
+.tree-item.active .tree-toggle,
+.tree-item[aria-pressed="true"] .tree-toggle {
+  color: #2d7a67 !important;
+}
+
+/* "All Tutorials" button - hero-inspired gradient */
+.tree-item-all {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.15) 0%, rgba(114, 202, 218, 0.15) 100%) !important;
+  color: #2d7a67 !important;
+  font-weight: 500 !important;
+  border: 1px solid rgba(111, 220, 191, 0.25) !important;
+  box-shadow: none !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.tree-item-all:hover {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.25) 0%, rgba(114, 202, 218, 0.25) 100%) !important;
+  border-color: rgba(111, 220, 191, 0.4) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 6px rgba(111, 220, 191, 0.15) !important;
+}
+
+.tree-item-all.active,
+.tree-item-all[aria-pressed="true"] {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.3) 0%, rgba(114, 202, 218, 0.3) 100%) !important;
+  color: #1a5a4a !important;
+  font-weight: 600 !important;
+  border-color: rgba(111, 220, 191, 0.5) !important;
+}
+
+/* Blog filter tags - subtle like hero */
+.filter-tag {
+  background: rgba(245, 245, 245, 0.6) !important;
+  color: #555 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  font-weight: 400 !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.filter-tag:hover {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.12) 0%, rgba(114, 202, 218, 0.12) 100%) !important;
+  color: #2d7a67 !important;
+  border-color: rgba(111, 220, 191, 0.3) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 6px rgba(111, 220, 191, 0.15) !important;
+}
+
+.filter-tag.active,
+.filter-tag[aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(111, 220, 191, 0.2) 0%, rgba(114, 202, 218, 0.2) 100%) !important;
+  color: #1a5a4a !important;
+  border-color: rgba(111, 220, 191, 0.4) !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 8px rgba(111, 220, 191, 0.2) !important;
+}
+
+/* ============================================
+   RESPONSIVE IMPROVEMENTS
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .fade-in-element,
+  .tree-toggle,
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .skip-link,
+  nav,
+  .blog-filter,
+  .tutorial-sidebar,
+  .sidebar-toggle,
+  .social-links {
+    display: none;
+  }
+
+  .article-content {
+    max-width: 100%;
+  }
+}

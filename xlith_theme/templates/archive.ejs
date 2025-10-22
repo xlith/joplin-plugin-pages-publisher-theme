@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+<%- include('helpers/tagHelpers') %>
+<%- include('helpers/dateHelpers') %>
+
+<%
+  // Get all blog articles (only those with att-page:blog tag)
+  const blogArticles = $site.articles.filter(article => article.tags.includes('att-page:blog'));
+
+  // Collect all display tags from blog articles
+  const allTags = new Set();
+  blogArticles.forEach(article => {
+    getDisplayTags(article.tags).forEach(tag => {
+      allTags.add(tag);
+    });
+  });
+
+  const sortedTags = Array.from(allTags).sort();
+%>
+
+<section class="hero hero-archive" aria-labelledby="blog-heading">
+  <div class="hero-content">
+    <h1 id="blog-heading"><span class="underline-lilac">Blog</span></h1>
+    <p class="subtitle">Thoughts, insights, experiences and explorations</p>
+  </div>
+</section>
+
+<div class="container">
+  <!-- Tag Filter -->
+  <% if (sortedTags.length > 0) { %>
+  <nav class="blog-filter" aria-label="Filter articles by tag" role="tablist">
+    <button class="filter-tag active" data-tag="all" role="tab" aria-selected="true" aria-controls="blog-list">All (<%= blogArticles.length %>)</button>
+    <% sortedTags.forEach(tag => { %>
+      <% const count = blogArticles.filter(article => article.tags.includes(tag)).length; %>
+      <button class="filter-tag" data-tag="<%= tag %>" role="tab" aria-selected="false" aria-controls="blog-list"><%= tag %> (<%= count %>)</button>
+    <% }) %>
+  </nav>
+  <% } %>
+
+  <section aria-live="polite" aria-atomic="false">
+    <ul class="archive-list" id="blog-list" role="tabpanel">
+      <% blogArticles.forEach(article => { %>
+        <%- include('partials/article-card', { article: article, showHeroImage: true }) %>
+      <% }) %>
+    </ul>
+
+    <!-- No results message -->
+    <div id="blog-no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
+      <p>No articles found with the selected tag.</p>
+    </div>
+  </section>
+</div>
+
+<%- include('partials/footer') %>

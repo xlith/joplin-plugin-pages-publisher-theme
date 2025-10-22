@@ -1,0 +1,131 @@
+<%- include('partials/header') %>
+<%- include('helpers/tagHelpers') %>
+<%- include('helpers/dateHelpers') %>
+
+<%
+  // Null checks and validation
+  if (!$article) {
+    throw new Error('Article data is missing');
+  }
+
+  // Determine article type
+  const isBlog = $article.tags && $article.tags.includes('att-page:blog');
+  const isTutorial = $article.tags && $article.tags.includes('att-page:tutorial');
+  const heroImage = $article.htmlContent ? extractHeroImage($article.htmlContent) : null;
+
+  // Calculate reading time (approximately 200 words per minute)
+  const calculateReadingTime = (htmlContent) => {
+    if (!htmlContent) return 1;
+    const text = htmlContent.replace(/<[^>]*>/g, '');
+    const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+    const minutes = Math.ceil(wordCount / 200);
+    return minutes;
+  };
+
+  const readingTime = calculateReadingTime($article.htmlContent);
+%>
+
+<% if (isBlog) { %>
+  <!-- Blog Article Layout -->
+  <article class="article article-blog" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="article-hero article-hero--simple">
+      <div class="article-hero__content">
+        <div class="article-meta">
+          <time datetime="<%= $article.updatedAt %>" itemprop="dateModified"><%= formatDateLong($article.updatedAt) %></time>
+          <span class="article-meta__separator" aria-hidden="true">•</span>
+          <span class="article-meta__reading-time"><%= readingTime %> min read</span>
+        </div>
+        <h1 class="article-title" itemprop="headline"><%= $article.title %></h1>
+        <div class="article-tags">
+          <% getDisplayTags($article.tags).forEach(tag => { %>
+            <span class="tag"><%= tag %></span>
+          <% }) %>
+        </div>
+      </div>
+    </header>
+
+    <div class="article-body" itemprop="articleBody">
+      <div class="article-content">
+        <%- $article.htmlContent %>
+      </div>
+
+      <footer class="article-footer">
+        <% if (getDisplayTags($article.tags).length > 0) { %>
+        <div class="article-tags article-tags--footer">
+          <span class="article-tags__label">Tagged with:</span>
+          <% getDisplayTags($article.tags).forEach(tag => { %>
+            <span class="tag" itemprop="keywords"><%= tag %></span>
+          <% }) %>
+        </div>
+        <% } %>
+        <nav class="article-nav" aria-label="Article navigation">
+          <a href="/archive" class="article-nav__link">← Back to Blog</a>
+        </nav>
+      </footer>
+    </div>
+  </article>
+
+<% } else if (isTutorial) { %>
+  <!-- Tutorial Article Layout -->
+  <article class="article article-tutorial" itemscope itemtype="https://schema.org/TechArticle">
+    <header class="article-hero article-hero--tutorial">
+      <% if (heroImage) { %>
+        <div class="article-hero__background">
+          <img src="<%= heroImage %>" alt="<%= $article.title %>" class="article-hero__image" itemprop="image" loading="lazy">
+        </div>
+      <% } %>
+      <div class="article-hero__content">
+        <div class="article-meta article-meta--inline">
+          <div class="article-meta__item">
+            <span class="article-meta__label">Updated:</span>
+            <time datetime="<%= $article.updatedAt %>" class="article-meta__value" itemprop="dateModified"><%= formatDateLong($article.updatedAt) %></time>
+          </div>
+          <div class="article-tags article-tags--inline">
+            <% getDisplayTags($article.tags).forEach(tag => { %>
+              <span class="tag tag--small"><%= tag %></span>
+            <% }) %>
+          </div>
+        </div>
+        <h1 class="article-title" itemprop="headline"><%= $article.title %></h1>
+      </div>
+    </header>
+
+    <div class="article-body" itemprop="articleBody">
+      <div class="article-content">
+        <%- $article.htmlContent %>
+      </div>
+
+      <footer class="article-footer">
+        <nav class="article-nav" aria-label="Article navigation">
+          <a href="/tutorials" class="article-nav__link">← Back to Tutorials</a>
+        </nav>
+      </footer>
+    </div>
+  </article>
+
+<% } else { %>
+  <!-- Default Article Layout (fallback) -->
+  <article class="article-default" itemscope itemtype="https://schema.org/Article">
+    <div class="container">
+      <header class="article-header">
+        <h1 itemprop="headline"><%= $article.title %></h1>
+        <div class="article-meta">
+          <time datetime="<%= $article.updatedAt %>" itemprop="dateModified"><%= formatDateLong($article.updatedAt) %></time>
+        </div>
+        <% if (getDisplayTags($article.tags).length > 0) { %>
+        <div class="tags">
+          <% getDisplayTags($article.tags).forEach(tag => { %>
+            <span class="tag" itemprop="keywords"><%= tag %></span>
+          <% }) %>
+        </div>
+        <% } %>
+      </header>
+
+      <section class="article-content" itemprop="articleBody">
+        <%- $article.htmlContent %>
+      </section>
+    </div>
+  </article>
+<% } %>
+
+<%- include('partials/footer') %>

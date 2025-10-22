@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<%
+  // Get about
+  const abouts = $site.articles.filter(article => article.tags.includes('att-page:about'));
+  const hasAbout = abouts.length > 0;
+%>
+
+  <section class="hero hero-about">
+    <div class="hero-content">
+      <h1>About <span class="underline-sea">Me</span></h1>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="about-content">
+      <% if (hasAbout) { %>
+        <% abouts.forEach(article => { %>
+          <%- article.htmlContent %>
+        <% }); %>
+      <% } else { %>
+        <p>No content found for the About page. Please create an article with the tag <code>att-page:about</code>.</p>
+      <% } %>
+    </section>
+  </div>
+
+  <%- include('partials/footer') %>
