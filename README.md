@@ -2,6 +2,8 @@
 
 A modern theme for [Joplin Pages Publisher](https://github.com/ylc395/pages-publisher) featuring advanced tag-based organization, hierarchical navigation, and intelligent content filtering.
 
+An implementation of this theme can be found in [civan.me](https://civan.me)
+
 ![Theme Preview](./image.png)
 
 ## Prerequisites
